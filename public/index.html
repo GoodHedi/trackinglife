@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackingLife - Suivi de Calories</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-animations">
+        <div class="bubbles-container"></div>
+        <div class="fish-container">
+            <div class="fish fish-1">🐟</div>
+            <div class="fish fish-2">🐠</div>
+            <div class="fish fish-3">🐡</div>
+            <div class="fish fish-4">🦈</div>
+            <div class="fish fish-5">🐙</div>
+        </div>
+    </div>
+    <div id="app">
+        <div id="auth-container" class="container">
+            <div class="auth-box animate-fade-in">
+                <h1 class="app-title">TrackingLife</h1>
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Connexion</button>
+                    <button class="tab-btn" data-tab="register">Inscription</button>
+                </div>
+                
+                <form id="login-form" class="auth-form active">
+                    <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
+                    <input type="password" id="login-password" placeholder="Mot de passe" required>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                </form>
+                
+                <form id="register-form" class="auth-form">
+                    <input type="text" id="register-username" placeholder="Nom d'utilisateur" required>
+                    <input type="email" id="register-email" placeholder="Email (optionnel)">
+                    <input type="password" id="register-password" placeholder="Mot de passe" required>
+                    <button type="submit" class="btn-primary">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="main-container" class="container hidden">
+            <header class="header">
+                <h1>TrackingLife</h1>
+                <div class="header-info">
+                    <span id="username-display"></span>
+                    <button id="logout-btn" class="btn-secondary">Déconnexion</button>
+                </div>
+            </header>
+
+            <nav class="nav-tabs">
+                <button class="nav-btn active" data-page="diary">Journal</button>
+                <button class="nav-btn" data-page="foods">Aliments</button>
+                <button class="nav-btn" data-page="goals">Objectifs</button>
+                <button class="nav-btn" data-page="stats">Statistiques</button>
+            </nav>
+
+            <div id="diary-page" class="page active">
+                <div class="date-selector">
+                    <button id="prev-date" class="date-nav">◀</button>
+                    <input type="date" id="diary-date">
+                    <button id="next-date" class="date-nav">▶</button>
+                </div>
+
+                <div class="daily-summary animate-slide-in">
+                    <h3>Résumé du jour</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="label">Calories</span>
+                            <span class="value" id="total-calories">0</span>
+                            <span class="goal" id="goal-calories">/ 2000</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Protéines</span>
+                            <span class="value" id="total-proteins">0g</span>
+                            <span class="goal" id="goal-proteins">/ 50g</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Glucides</span>
+                            <span class="value" id="total-carbs">0g</span>
+                            <span class="goal" id="goal-carbs">/ 250g</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Lipides</span>
+                            <span class="value" id="total-fats">0g</span>
+                            <span class="goal" id="goal-fats">/ 65g</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="calories-progress" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="add-food-section">
+                    <h3>Ajouter un aliment</h3>
+                    <div class="add-food-form">
+                        <select id="food-select">
+                            <option value="">Sélectionner un aliment</option>
+                        </select>
+                        <input type="number" id="food-quantity" placeholder="Quantité (g)" min="1">
+                        <select id="meal-type">
+                            <option value="breakfast">Petit-déjeuner</option>
+                            <option value="lunch">Déjeuner</option>
+                            <option value="dinner">Dîner</option>
+                            <option value="snack">Collation</option>
+                        </select>
+                        <button id="add-to-diary" class="btn-primary">Ajouter</button>
+                    </div>
+                </div>
+
+                <div class="diary-entries">
+                    <h3>Entrées du journal</h3>
+                    <div id="diary-list"></div>
+                </div>
+            </div>
+
+            <div id="foods-page" class="page">
+                <div class="foods-header">
+                    <h2>Gestion des aliments</h2>
+                    <button id="add-food-btn" class="btn-primary">+ Nouvel aliment</button>
+                </div>
+
+                <div id="food-form" class="food-form hidden">
+                    <h3>Ajouter un aliment</h3>
+                    <input type="text" id="food-name" placeholder="Nom de l'aliment" required>
+                    <input type="number" id="food-calories" placeholder="Calories (pour 100g)" required>
+                    <input type="number" id="food-proteins" placeholder="Protéines (g)" step="0.1">
+                    <input type="number" id="food-carbs" placeholder="Glucides (g)" step="0.1">
+                    <input type="number" id="food-fats" placeholder="Lipides (g)" step="0.1">
+                    <label>
+                        <input type="checkbox" id="food-public">
+                        Rendre public
+                    </label>
+                    <div class="form-buttons">
+                        <button id="save-food" class="btn-primary">Enregistrer</button>
+                        <button id="cancel-food" class="btn-secondary">Annuler</button>
+                    </div>
+                </div>
+
+                <div class="foods-search">
+                    <input type="text" id="search-foods" placeholder="Rechercher un aliment...">
+                </div>
+
+                <div id="foods-list" class="foods-grid"></div>
+            </div>
+
+            <div id="goals-page" class="page">
+                <h2>Mes objectifs nutritionnels</h2>
+                
+                <div class="goals-summary">
+                    <h3>Progression du jour</h3>
+                    <div class="macro-progress-grid">
+                        <div class="macro-progress-item">
+                            <div class="macro-header">
+                                <span class="macro-label">Calories</span>
+                                <span class="macro-values">
+                                    <span id="current-calories">0</span> / <span id="target-calories">2000</span>
+                                </span>
+                            </div>
+                            <div class="progress-bar-macro">
+                                <div id="progress-calories" class="progress-fill-macro"></div>
+                            </div>
+                            <span class="macro-percentage" id="percent-calories">0%</span>
+                        </div>
+                        
+                        <div class="macro-progress-item">
+                            <div class="macro-header">
+                                <span class="macro-label">Protéines</span>
+                                <span class="macro-values">
+                                    <span id="current-proteins">0</span>g / <span id="target-proteins">50</span>g
+                                </span>
+                            </div>
+                            <div class="progress-bar-macro proteins">
+                                <div id="progress-proteins" class="progress-fill-macro"></div>
+                            </div>
+                            <span class="macro-percentage" id="percent-proteins">0%</span>
+                        </div>
+                        
+                        <div class="macro-progress-item">
+                            <div class="macro-header">
+                                <span class="macro-label">Glucides</span>
+                                <span class="macro-values">
+                                    <span id="current-carbs">0</span>g / <span id="target-carbs">250</span>g
+                                </span>
+                            </div>
+                            <div class="progress-bar-macro carbs">
+                                <div id="progress-carbs" class="progress-fill-macro"></div>
+                            </div>
+                            <span class="macro-percentage" id="percent-carbs">0%</span>
+                        </div>
+                        
+                        <div class="macro-progress-item">
+                            <div class="macro-header">
+                                <span class="macro-label">Lipides</span>
+                                <span class="macro-values">
+                                    <span id="current-fats">0</span>g / <span id="target-fats">65</span>g
+                                </span>
+                            </div>
+                            <div class="progress-bar-macro fats">
+                                <div id="progress-fats" class="progress-fill-macro"></div>
+                            </div>
+                            <span class="macro-percentage" id="percent-fats">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="goals-form">
+                    <h3>Définir mes objectifs</h3>
+                    <div class="form-group">
+                        <label>Calories quotidiennes</label>
+                        <input type="number" id="goal-daily-calories" placeholder="2000">
+                        <span class="form-hint">Recommandé: 2000-2500 kcal pour un adulte</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Protéines (g)</label>
+                        <input type="number" id="goal-daily-proteins" placeholder="50" step="0.1">
+                        <span class="form-hint">Recommandé: 0.8-2g par kg de poids corporel</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Glucides (g)</label>
+                        <input type="number" id="goal-daily-carbs" placeholder="250" step="0.1">
+                        <span class="form-hint">Recommandé: 45-65% des calories totales</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Lipides (g)</label>
+                        <input type="number" id="goal-daily-fats" placeholder="65" step="0.1">
+                        <span class="form-hint">Recommandé: 20-35% des calories totales</span>
+                    </div>
+                    <button id="save-goals" class="btn-primary">Enregistrer les objectifs</button>
+                </div>
+            </div>
+
+            <div id="stats-page" class="page">
+                <h2>Statistiques</h2>
+                <div class="stats-period">
+                    <button class="period-btn active" data-period="week">7 jours</button>
+                    <button class="period-btn" data-period="month">30 jours</button>
+                </div>
+                <div id="stats-container">
+                    <div class="stat-card">
+                        <h3>Moyenne de calories</h3>
+                        <p id="avg-calories">Calcul en cours...</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total des entrées</h3>
+                        <p id="total-entries">Calcul en cours...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

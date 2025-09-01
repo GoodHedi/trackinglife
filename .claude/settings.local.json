@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(dir)",
+      "Bash(dir public)",
+      "Bash(tasklist:*)",
+      "Bash(taskkill:*)",
+      "Bash(node server.js)",
+      "Bash(taskkill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
